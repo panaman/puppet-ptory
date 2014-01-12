@@ -1,0 +1,76 @@
+<?php 
+include('<%= @ptory_root %>/inc/head_main.php');
+?>
+<div class="pad">
+<div class="pad">
+<h3>SEARCH</h3>
+<form name="serverinfo" method="post" action="search.php">
+<input class="formtxt" type="text" name="search">
+<input class="submit" type="submit" name="submit" value="submit">
+<input class="clear" type="reset" value="clear">
+</form></div>
+<?php
+if (isset($_GET['sortname'])) {
+  $sortname = $_GET['sortname'];
+  if ($sortname == 'CPU') {
+    $sorted = shell_exec("grep 'CPUCORES = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/CPUCORES =//g' | awk '{print $2,$1}' | sort -n| awk '{print $2}'");
+    echo '<pre>Sorted by CPU CORES</pre>';
+  } elseif ($sortname == 'MODEL') {
+    $sorted = shell_exec("grep 'SERVERMODEL = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/SERVERMODEL =//g' | awk '{print $2,$3,$1}' | sort -n| awk '{print $3}'");
+    echo '<pre>Sorted by SERVER MODEL</pre>';
+  } elseif ($sortname == 'MEGARAMZ') {
+    $sorted = shell_exec("grep 'MEGARAMS = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/MEGARAMS =//g' | awk '{print $2,$1}' | sort -n| awk '{print $2}'");
+    echo '<pre>Sorted by MEMORY</pre>';
+  } elseif ($sortname == 'NSM') {
+    $sorted = shell_exec("grep 'NSMDISK = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/NSMDISK =//g' | awk '{print $2,$1}' | sort -n| awk '{print $2}'"); 
+    echo '<pre>Sorted by NSM DISK SIZE</pre>';
+  } elseif ($sortname == 'PCAP') {
+    $sorted = shell_exec("grep 'PCAPDATASIZE = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/PCAPDATASIZE =//g' | awk '{print $2,$1}' | sort -n| awk '{print $2}'");
+    echo '<pre>Sorted by PCAP DATA</pre>';
+  } elseif ($sortname == 'UPTIME') {
+    $sorted = shell_exec("grep 'UPTIME = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/UPTIME =//g' | awk '{print $2,$1}' | sort -n| awk '{print $2}'");
+    echo '<pre>Sorted by DAYS UP</pre>';
+  } elseif ($sortname == 'OSR') {
+    $sorted = shell_exec("grep 'OSR = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/OSR =//g' | awk '{print $2,$1}' | sort -n| awk '{print $2}'");
+    echo '<pre>Sorted by OS</pre>';
+  } elseif ($sortname == 'DATE') {
+    $sorted = shell_exec("grep 'ISVIRTUAL = ' <%= @ptory_root %>/servervar/*.php | tr -d ':;$' | sed 's/\"//g' | sed 's/ISVIRTUAL =//g' | awk '{print $2,$1}' | sort -n| awk '{print $2}'");
+    echo '<pre>Sorted by VIRTUAL</pre>';
+  } else {}
+  $files = preg_split('/[\r\n]+/', $sorted, -1, PREG_SPLIT_NO_EMPTY);
+} else {
+  $files = glob('<%= @ptory_root %>/servervar/*.php');
+  $files = array_filter($files, 'is_file');
+  echo '<pre>Sorted by HOSTNAME</pre>';
+}
+echo '<div class="pad"><table class="shortnamelist"><tr>';
+echo "<td class='hostname'><B><a href=\"hostname_short.php\">HOSTNAME</a></B></td>";
+echo "<td class='hostinterface'><B>HOST INT:IP</B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=MODEL\">SERVER MODEL</a></B></td>";
+echo "<td class='default'><B>SERIAL #</B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=CPU\">CPU THREADS</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=PROCESSOR\">CPU TYPE</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=MEGARAMZ\">MEMORY</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=UPTIME\">DAYS UP</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=OSR\">OS</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=ISVIRTUAL\">VIRTUAL</a></B></td>";
+echo '</tr></table></div><div class="thinbar"></div>';
+
+foreach ($files as $S) {
+  include_once("${S}");
+  echo '<div class="pad"><table class="shortnamelist"><tr>';
+  echo "<td class='hostname'><a href=\"hostname_long.php?name=${HOSTNAME}\">${HOSTNAME}</a></td>";
+  echo "<td class='hostinterface'>${HOSTINT}: ${HOSTIP}</td>";
+  echo "<td class='default'>${SERVERMODEL}</td>";
+  echo "<td class='default'>${SERIALNUMBER}</td>";
+  echo "<td class='default'>${CPUCORES}</td>";
+  echo "<td class='default'>${CPU}</a></td>";
+  echo "<td class='default'>${MEGARAMS}</td>";
+  echo "<td class='default'>${UPTIME}</td>";
+  echo "<td class='default'>${OS} ${OSR}</td>";
+  echo "<td class='default'>${ISVIRTUAL}</td>";
+  echo '</tr></table></div>';
+}
+echo '</div>';
+include_once('<%= @ptory_root %>/inc/foot_main.php');
+?>

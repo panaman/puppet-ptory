@@ -1,0 +1,100 @@
+<?php 
+require_once('<%= @ptory_root %>/inc/head_main.php');
+?>
+<div class="pad">
+<div class="pad">
+<div class="pad">
+<table class="stats">
+<tr>
+<td>
+<pre><b>NODE STATS</b></pre>
+<?php
+$nodedir = '<%= @ptory_root %>/servervar/';
+$nodecount = '0';
+$files = glob($nodedir . "*_server_var.php");
+if ($files) {
+  $nodecount = count($files);
+}
+
+$files = array_filter($files, 'is_file');
+foreach($files as $os_var) {
+  echo $os_var;
+}
+
+echo '<pre>Total Nodes: '.$nodecount.'</pre>';
+$val = 'SERVERMODEL';
+$list = shell_exec("grep '$val =' <%= @ptory_root %>/servervar/*_server_var.php | tr -d '\";' | awk '{print $3}' | sort -u");
+$list = preg_split('/[\r\n]+/', $list, -1, PREG_SPLIT_NO_EMPTY);
+foreach ($list as $v) {
+  $count = shell_exec("cat <%= @ptory_root %>/servervar/*.php | grep '$val' | grep '$v' | wc -l");
+  echo "<pre>${v}: $count</pre>";
+}
+echo '<HR>';
+$val = 'MANUFACTURER';
+$list = shell_exec("cat <%= @ptory_root %>/servervar/*.php | grep '.escapeshellarg($val). =' | grep -o '= \".*' | sed 's/= \"//g' | sed 's/\";//g' | sort -u");
+$list = preg_split('/[\r\n]+/', $list, -1, PREG_SPLIT_NO_EMPTY);
+foreach ($list as $v) {
+  $count = shell_exec("cat <%= @ptory_root %>/servervar/*.php | grep '.escapeshellarg($val).' | grep '.escapeshellarg($v)' | wc -l");
+  echo "<pre>${v}: $count</pre>";
+}
+?>
+</td>
+<td>
+<pre><b>CPU STATS</b></pre>
+<?php
+$val = 'CPU';
+$list = shell_exec("cat <%= @ptory_root %>/servervar/*.php | grep '$val =' | grep -o '= \".*' | sed 's/= \"//g' | sed 's/\";//g' | sort -u");
+$list = preg_split('/[\r\n]+/', $list, -1, PREG_SPLIT_NO_EMPTY);
+foreach ($list as $v) {
+  $count = shell_exec("cat <%= @ptory_root %>/servervar/*.php | grep '$val' | grep '$v' | wc -l");
+  echo "<pre>${v}: $count</pre>";
+}
+?>
+</td>
+
+<td>
+<pre><b>MEMORY STATS</b></pre>
+<?php
+$val = 'MEGARAMS';
+$list = shell_exec("grep '$val =' <%= @ptory_root %>/servervar/*.php | tr -d '\";' | awk '{print $3,$4}' | sort -u");
+$list = preg_split('/[\r\n]+/', $list, -1, PREG_SPLIT_NO_EMPTY);
+foreach ($list as $v) {
+  $count = shell_exec("cat <%= @ptory_root %>/servervar/*.php | grep '$val' | grep '$v' | wc -l");
+  echo "<pre>${v}: $count</pre>";
+}
+?>
+
+</td>
+<td>
+<pre><b>UPTIME STATS</b></pre>
+<?php
+$uptime100 = shell_exec('grep \'$UPTIME =\' <%= @ptory_root %>/servervar/*_server_var.php | grep \'"[0-9][0-9][0-9]"\' | wc -l');
+echo "<pre>100+ Days Up: $uptime100</a></pre>";
+$val = 'UPTIME';
+$list = shell_exec("grep '$val =' <%= @ptory_root %>/servervar/*_server_var.php | tr -d '\";' | awk '{print $3}' | sort -u");
+$list = preg_split('/[\r\n]+/', $list, -1, PREG_SPLIT_NO_EMPTY);
+foreach ($list as $v) {
+  $count = shell_exec("cat <%= @ptory_root %>/servervar/*_server_var.php | grep '$val' | grep '$v' | wc -l");
+  echo "<pre>Up ${v} Days: $count</pre>";
+}
+?>
+</td>
+<td>
+<pre><b>OPERATING SYSTEMS</b></pre>
+<?php
+$val = 'OS';
+$list = shell_exec("grep '$val =' <%= @ptory_root %>/servervar/*_server_var.php | tr -d '\";' | awk '{print $3}' | sort -u");
+$list = preg_split('/[\r\n]+/', $list, -1, PREG_SPLIT_NO_EMPTY);
+foreach ($list as $v) {
+  $count = shell_exec("cat <%= @ptory_root %>/servervar/*_server_var.php | grep '$val' | grep '$v' | wc -l");
+  echo "<pre>${v}: $count</pre>";
+}
+
+?>
+</td>
+</tr>
+</table>
+</div>
+<?php
+require_once('<%= @ptory_root %>/inc/foot_main.php');
+?>

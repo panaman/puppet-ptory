@@ -1,0 +1,31 @@
+HOST: <%= @fqdn %>
+OS: <%= @operatingsystem %><% if @operatingsystemrelease %> <%= @operatingsystemrelease %><% else %>UNKNOWN<% end %>
+HOST INT: <% if @hostint %><%= @hostint %><% if @hostint_speed %> <%= @hostint_speed %><% end %><% if @hostint_duplex %> <%= @hostint_duplex %><% end %><% else %>UNKNOWN<% end %>
+IP: <% if @hostint_ipv4 -%><%= @hostint_ipv4 %><% else %>UNKNOWN<% end %>
+NETMASK: <% if @netmask -%><%= @netmask %><% else %>UNKNOWN<% end %>
+GATEWAY: <% if @hostint_gw -%><%= @hostint_gw %><% else %>UNKNOWN<% end %>
+DNS: <% if @hostint_dns %><%= @hostint_dns %><% else %> UNKNOWN<% end %>
+<% if @operatingsystem == 'Darwin' -%>
+PRODUCT: <% if @productname %>Apple : <%= @productname %><% else %>Apple<% end %>
+<% else -%>
+PRODUCT: <% if @manufacturer %><%= @manufacturer %><% end %><% if @productname %> : <%= @productname %><% end %>
+<% end -%>
+<% if @operatingsystem == 'Darwin' -%>
+SERIAL: <%if @sp_serial_number %><%= @sp_serial_number %><% else %>UNKNOWN<% end %>
+<% else -%>
+SERIAL: <% if @serialnumber %><%= @serialnumber %><% else %>UNKNOWN<% end %>
+<% if @operatingsystem == 'Darwin' -%>
+CPU: <% if @sp_cpu_type %><%= @sp_cpu_type %><% else %>UNKNOWN<% end %>
+<% else -%>
+CPU: <% if @processor0 %><%= @processor0 %><% else %>UNKNOWN<% end %>
+<% end -%>
+<% if @operatingsystem == 'Darwin' -%>
+CPU THREADS: <% if @sp_number_processors %><%= @sp_number_processors %><% else %>UNKNOWN<% end %>
+<% else -%>
+CPU THREADS: <% if @processorcount %><%= @processorcount %><% else %>UNKNOWN<% end %>
+<% end -%>
+MEGARAMZ: <% if @memorysize %><%= @memorysize %><% else %>UNKNOWN<<% end %>
+VIRTUAL: <% if @is_virtual %><%= @is_virtual %><% else %>UNKNOWN<<% end %>
+UPTIME: <%= @uptime_days %> Days
+DESCRIPTION: <%= @desc %>
+ROLE: <%= @ptory_role %><% end %>

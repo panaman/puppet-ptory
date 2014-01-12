@@ -1,0 +1,9 @@
+Listen <%= @ptory_port %>
+<VirtualHost <%= @ptory_ip %>:<%= @ptory_port %>>
+        ServerName <%= @ptory_url %>
+        DocumentRoot <%= @ptory_root %>/web
+        ErrorLog /var/log/<%= @apache_server %>/ptory_error.log
+        LogLevel warn
+        CustomLog /var/log/<%= @apache_server %>/ptory_access.log combined
+        ServerSignature On
+</VirtualHost>

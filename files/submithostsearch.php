@@ -1,0 +1,53 @@
+<?php
+session_start();
+include('head_main.php');
+echo '<div class="pad">';
+echo '<div class="pad">';
+echo '<div class="pad">';
+echo '<h3>SEARCH</h3>';
+echo '<form name="serverinfo" method="post" action="submithostsearch.php">';
+echo '<input class="formtxt" type="text" name="search">';
+echo '<input class="submit" type="submit" name="submit" value="submit">';
+echo '<input class="clear" type="reset" value="clear">';
+echo '</form></div>';
+$search = $_POST['search'];
+$results = shell_exec("grep -i \"$search\" servervar/*.php | sed 's/:/ /g' | awk '{print $1}' | sort -u");
+$count = shell_exec("grep -i \"$search\" servervar/*.php | sed 's/:/ /g' | awk '{print $1}' | sort -u | wc -l");
+$files = preg_split('/[\r\n]+/', $results, -1, PREG_SPLIT_NO_EMPTY);
+echo "Search for $search returned $count results";
+echo '<div class="pad"><table><tr>';
+echo "<td class='hostname'><B><a href=\"hostname_short.php\">HOSTNAME</a></B></td>";
+echo "<td class='hostinterface'><B>MGMT INT/IP</B></td>";
+echo "<td class='dracip'><B>DRAC IP</B></td>";
+echo "<td class='productname'><B><a href=\"hostname_short.php?sortname=MODEL\">SERVER MODEL</a></B></td>";
+echo "<td class='serialnumber'><B>SVC TAG</B></td>";
+echo "<td class='cpu'><B><a href=\"hostname_short.php?sortname=CPU\">CPU</a></B></td>";
+echo "<td class='memorysize'><B><a href=\"hostname_short.php?sortname=MEGARAMZ\">MEMORY</a></B></td>";
+echo "<td class='disksize'><B><a href=\"hostname_short.php?sortname=NSM\">NSM DISK SIZE</a></B></td>";
+echo "<td class='pcapdata'><B><a href=\"hostname_short.php?sortname=PCAP\">PCAP DATA</a></B></td>";
+echo "<td class='uptime'><B><a href=\"hostname_short.php?sortname=UPTIME\">DAYS UP</a></B></td>";
+echo "<td class='os'><B>OS</a></B></td>";
+echo "<td class='redmine'><B>REDMINE</B></td>";
+echo "<td class='todaysdate'><B><a href=\"hostname_short.php?sortname=DATE\">SYNC DATE</a></B></td>";
+echo '</table></div>';
+foreach ($files as $S) {
+  include("${S}");
+  echo '<div class="pad"><table><tr>';
+  echo "<td class='hostname'><a href=\"hostname_long.php?name=${HOSTNAME}\">${HOSTNAME}</a></td>";
+  echo "<td class='hostinterface'>${HOSTINTERFACE}: ${HOSTIP}</td>";
+  echo "<td class='dracip'><a href=\"https://${RACIP}\" target=\"_blank\">${RACIP}</a></td>";
+  echo "<td class='productname'>${SERVERMODEL}</td>";
+  echo "<td class='serialnumber'>${SERIALNUMBER}</td>";
+  echo "<td class='cpu'>${CPUCORES}</td>";
+  echo "<td class='memorysize'>${MEGARAMS}</td>";
+  echo "<td class='disksize'>${NSMDISK}</td>";
+  echo "<td class='pcapdata'>${PCAPDATASIZE}</td>";
+  echo "<td class='uptime'>${UPTIME}</td>";
+  echo "<td class='os'>${OS} ${OSR}</td>";
+  echo "<td class='redmine'><a href=\"https://redmine.ircnet.ge.com/search?q=${SHORTNAMELOW}\" target=\"_blank\">Tickets</a></td>";
+  echo "<td class='todaysdate'>${SYNCDATE}</td>";
+  echo '</tr></table></div>';
+}
+echo '</div>';
+include('foot_main.php');
+?>

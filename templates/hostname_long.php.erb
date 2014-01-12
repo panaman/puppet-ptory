@@ -1,0 +1,161 @@
+<?php 
+require_once('<%= @ptory_root %>/inc/head_main.php');
+if (isset($_GET['name'])) {
+  $host = $_GET['name'];
+  if(file_exists("<%= @ptory_root %>/servervar/${host}_server_var.php")) {
+    include_once("<%= @ptory_root %>/servervar/${host}_server_var.php");
+  } else {
+    header("Location: http://<%= @ptory_url %>:<%= @ptory_port %>/");
+    exit;
+  }
+}
+?>
+<div class="pad">
+<H1>NODE INFO: <?php echo "$HOSTNAME";?></H1>
+<div class="pad">
+<table>
+<tr>
+<td class="longleft">
+DOMAIN
+</td>
+<td class="longright">
+<?php echo "$DOMAIN";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+OS
+</td>
+<td class="longright">
+<?php echo "$OS $OSR";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+ALL INTERFACES
+</td>
+<td class="longright">
+<?php echo "$ALL_INTS";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+HOST INTERFACE
+</td>
+<td class="longright">
+<?php echo "$HOSTINT - $HOSTINT_SPEED - $HOSTINT_DUPLEX";?> 
+</td>
+</tr>
+<tr>
+<td class="longleft">
+HOST IP
+</td>
+<td class="longright">
+<?php echo "$HOSTIP";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+HOST NETMASK
+</td>
+<td class="longright">
+<?php echo "$HOSTNETMASK";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+HOST GATEWAY
+</td>
+<td class="longright">
+<?php echo "$HOSTGATEWAY";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+HOST DNS
+</td>
+<td class="longright">
+<?php echo "$DNS";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+BIOS VERSION
+</td>
+<td class="longright">
+<?php echo "$BIOSVER";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+SERVER MODEL
+</td>
+<td class="longright">
+<?php echo "$SERVERMODEL";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+SERIAL NUMBER
+</td>
+<td class="longright">
+<?php echo "$SERIALNUMBER";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+CPU
+</td>
+<td class="longright">
+<?php echo "$CPU";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+CPU THREADS
+</td>
+<td class="longright">
+<?php echo "$CPUCORES";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+MEGARAMS
+</td>
+<td class="longright">
+<?php echo "$MEGARAMS";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+VIRTUAL
+</td>
+<td class="longright">
+<?php echo "$ISVIRTUAL";?>
+</td>
+</tr>
+<tr>
+<td class="longleft">
+DESCRIPTION
+</td>
+<td class="longright">
+<?php echo "$DESC"; ?>
+</td>
+</tr>
+<td class="longleft">
+ROLE
+</td>
+<td class="longright">
+<?php echo "$ROLE"; ?>
+</td>
+</tr>
+<td class="longleft">
+UPTIME
+</td>
+<td class="longright">
+<?php echo "$UPTIME"; ?>
+</td>
+</tr>
+</table>
+</div>
+<?php require_once('<%= @ptory_root %>/inc/foot_main.php');?>

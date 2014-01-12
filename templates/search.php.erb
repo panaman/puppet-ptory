@@ -1,0 +1,47 @@
+<?php
+session_start();
+include('<%= @ptory_root %>/inc/head_main.php');
+echo '<div class="pad">';
+echo '<div class="pad">';
+echo '<div class="pad">';
+echo '<h3>SEARCH</h3>';
+echo '<form name="serverinfo" method="post" action="search.php">';
+echo '<input class="formtxt" type="text" name="search">';
+echo '<input class="submit" type="submit" name="submit" value="submit">';
+echo '<input class="clear" type="reset" value="clear">';
+echo '</form></div>';
+$search = $_POST['search'];
+$results = shell_exec("grep -i \"$search\" <%= @ptory_root %>/servervar/*.php | sed 's/:/ /g' | awk '{print $1}' | sort -u");
+$count = shell_exec("grep -i \"$search\" <%= @ptory_root %>/servervar/*.php | sed 's/:/ /g' | awk '{print $1}' | sort -u | wc -l");
+$files = preg_split('/[\r\n]+/', $results, -1, PREG_SPLIT_NO_EMPTY);
+echo "Search for $search returned $count results";
+echo '<div class="pad"><table class="shortnamelist"><tr>';
+echo "<td class='hostname'><B><a href=\"hostname_short.php\">HOSTNAME</a></B></td>";
+echo "<td class='hostinterface'><B>HOST INT:IP</B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=MODEL\">SERVER MODEL</a></B></td>";
+echo "<td class='default'><B>SERIAL #</B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=CPU\">CPU THREADS</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=PROCESSOR\">CPU TYPE</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=MEGARAMZ\">MEMORY</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=UPTIME\">DAYS UP</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=OSR\">OS</a></B></td>";
+echo "<td class='default'><B><a href=\"hostname_short.php?sortname=ISVIRTUAL\">VIRTUAL</a></B></td>";
+echo '</tr></table></div><div class="thinbar"></div>';
+foreach ($files as $S) {
+  include("${S}");
+  echo '<div class="pad"><table class="shortnamelist"><tr>';
+  echo "<td class='hostname'><a href=\"hostname_long.php?name=${HOSTNAME}\">${HOSTNAME}</a></td>";
+  echo "<td class='hostinterface'>${HOSTINT}: ${HOSTIP}</td>";
+  echo "<td class='default'>${SERVERMODEL}</td>";
+  echo "<td class='default'>${SERIALNUMBER}</td>";
+  echo "<td class='default'>${CPUCORES}</td>";
+  echo "<td class='default'>${CPU}</a></td>";
+  echo "<td class='default'>${MEGARAMS}</td>";
+  echo "<td class='default'>${UPTIME}</td>";
+  echo "<td class='default'>${OS} ${OSR}</td>";
+  echo "<td class='default'>${ISVIRTUAL}</td>";
+  echo '</tr></table></div>';
+}
+echo '</div>';
+include('<%= @ptory_root %>/inc/foot_main.php');
+?>

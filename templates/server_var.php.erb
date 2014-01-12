@@ -1,0 +1,25 @@
+<?php
+$HOSTNAME = "<%= @hostname %>";
+$OS = "<%= @operatingsystem %>";
+$OSR = "<% if @operatingsystemrelease %><%= @operatingsystemrelease %><% else %>NA<% end %>";
+$HOSTINT = "<% if @hostint %><%= @hostint %><% else %>NA<% end %>";
+$ALL_INTS = "<% if @interfaces %><%= @interfaces %><% else %>NA<% end %>";
+$HOSTINT_SPEED = "<% if @hostint_speed %><%= @hostint_speed %><% else %>NA<% end %>";
+$HOSTINT_DUPLEX = "<% if @hostint_duplex %><%= @hostint_duplex %><% else %>NA<% end %>";
+$HOSTIP = "<% if @hostint_ipv4 %><%= @hostint_ipv4 %><% else %>NA<% end %>";
+$DNS = "<% if @hostint_dns %><%= @hostint_dns %><% else %>NA<% end %>";
+$HOSTNETMASK = "<% if @netmask %><%= @netmask %><% else %>NA<% end %>";
+$HOSTGATEWAY = "<% if @hostint_gw %><%= @hostint_gw %><% else %>NA<% end %>";
+$BIOSVER = "<% if @bios_version %><%= @bios_version %><% else %>NA<% end %>";
+$MANUFACTURER = "<% if @operatingsystem == 'Darwin' then %>Apple<% else %><%= @manufacturer %><% end %>";
+$SERVERMODEL = "<% if @productname %><%= @productname %><% else %>NA<% end %>";
+$SERIALNUMBER = "<% if @operatingsystem == 'Darwin' then %><%= @sp_serial_number %><% elsif @serialnumber %><%= @serialnumber %><% else %>NA<% end %>";
+$CPU = "<% if @operatingsystem == 'Darwin' then %><%= @sp_cpu_type %><% elsif @processor0 %><%= @processor0 %><% else %>NA<% end %>";
+$CPUCORES = "<% if @operatingsystem == 'Darwin' then %><%= @sp_number_processors %><% else %><%= @processorcount %><% end %>";
+$MEGARAMS = "<%= @memorysize %>";
+$ISVIRTUAL = "<%= @is_virtual %>";
+$UPTIME = "<%= @uptime_days %>";
+$DOMAIN = "<% if @domain %><%= @domain %><% else %>NA<% end %>";
+$DESC = "<%= @desc %>";
+$ROLE = "<% if @ptory_role %><%= @ptory_role %><% else %>UNKNOWN<% end %>";
+?>
